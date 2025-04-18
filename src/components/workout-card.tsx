@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ interface WorkoutCardProps {
   intensity: "low" | "medium" | "high";
   type?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function WorkoutCard({
@@ -21,6 +21,7 @@ export function WorkoutCard({
   intensity,
   type = "strength",
   className,
+  style,
 }: WorkoutCardProps) {
   const intensityColors = {
     low: "text-green-500",
@@ -35,7 +36,10 @@ export function WorkoutCard({
   };
 
   return (
-    <Card className={cn("group hover:shadow-lg transition-all duration-300", className)}>
+    <Card 
+      className={cn("group hover:shadow-lg transition-all duration-300", className)}
+      style={style}
+    >
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
           <div>
@@ -135,7 +139,7 @@ export function WorkoutGrid() {
         <WorkoutCard 
           key={index} 
           {...workout}
-          className="animate-fade-in [animation-delay:var(--delay)]"
+          className="animate-fade-in"
           style={{ ['--delay' as any]: `${index * 100}ms` }}
         />
       ))}
