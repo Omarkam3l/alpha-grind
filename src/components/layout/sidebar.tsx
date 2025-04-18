@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { 
   BarChart3, 
   CalendarDays, 
@@ -40,6 +40,9 @@ function NavItem({ href, icon, children, active }: NavItemProps) {
 }
 
 export function Sidebar({ isOpen }: SidebarProps) {
+  const location = useLocation();
+  const currentPath = location.pathname;
+  
   return (
     <div className={`
       fixed inset-y-0 left-0 z-20 w-64 transform bg-card border-r p-4
@@ -55,31 +58,31 @@ export function Sidebar({ isOpen }: SidebarProps) {
       </div>
       
       <nav className="space-y-1">
-        <NavItem href="/" icon={<Home className="h-4 w-4" />} active>
+        <NavItem href="/" icon={<Home className="h-4 w-4" />} active={currentPath === "/"}>
           Dashboard
         </NavItem>
-        <NavItem href="/workouts" icon={<Dumbbell className="h-4 w-4" />}>
+        <NavItem href="/workouts" icon={<Dumbbell className="h-4 w-4" />} active={currentPath === "/workouts"}>
           Workouts
         </NavItem>
-        <NavItem href="/progress" icon={<BarChart3 className="h-4 w-4" />}>
+        <NavItem href="/progress" icon={<BarChart3 className="h-4 w-4" />} active={currentPath === "/progress"}>
           Progress
         </NavItem>
-        <NavItem href="/habits" icon={<FlameKindling className="h-4 w-4" />}>
+        <NavItem href="/habits" icon={<FlameKindling className="h-4 w-4" />} active={currentPath === "/habits"}>
           Habits
         </NavItem>
-        <NavItem href="/goals" icon={<Target className="h-4 w-4" />}>
+        <NavItem href="/goals" icon={<Target className="h-4 w-4" />} active={currentPath === "/goals"}>
           Goals
         </NavItem>
-        <NavItem href="/timer" icon={<Clock className="h-4 w-4" />}>
+        <NavItem href="/timer" icon={<Clock className="h-4 w-4" />} active={currentPath === "/timer"}>
           Timer
         </NavItem>
-        <NavItem href="/calendar" icon={<CalendarDays className="h-4 w-4" />}>
+        <NavItem href="/calendar" icon={<CalendarDays className="h-4 w-4" />} active={currentPath === "/calendar"}>
           Calendar
         </NavItem>
       </nav>
       
       <div className="absolute bottom-4 left-4 right-4">
-        <NavItem href="/settings" icon={<Settings className="h-4 w-4" />}>
+        <NavItem href="/settings" icon={<Settings className="h-4 w-4" />} active={currentPath === "/settings"}>
           Settings
         </NavItem>
       </div>
