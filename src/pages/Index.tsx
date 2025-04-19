@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Layout } from "@/components/layout/layout";
 import { StatsGrid } from "@/components/stats-card";
 import { HabitTracker } from "@/components/habit-tracker";
@@ -8,10 +8,24 @@ import { RandomQuoteCard } from "@/components/quote-card";
 import { WorkoutGrid } from "@/components/workout-card";
 import { Dumbbell, Trophy, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { OnboardingModal } from "@/components/onboarding-modal";
 
 const Index = () => {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  
+  useEffect(() => {
+    // Check if this is the user's first visit
+    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding");
+    if (!hasSeenOnboarding) {
+      setShowOnboarding(true);
+      localStorage.setItem("hasSeenOnboarding", "true");
+    }
+  }, []);
+
   return (
     <Layout>
+      <OnboardingModal open={showOnboarding} onOpenChange={setShowOnboarding} />
+      
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <section className="relative mb-10 overflow-hidden rounded-lg bg-gradient-to-r from-secondary to-black p-8">

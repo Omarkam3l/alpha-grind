@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -22,6 +23,9 @@ export function Layout({ children }: LayoutProps) {
         <Sidebar isOpen={sidebarOpen} />
         
         <main className="flex-1 md:ml-64 p-4 md:p-6 pt-6">
+          <div className="absolute right-6 top-4 md:top-6">
+            <ThemeToggle />
+          </div>
           {children}
         </main>
       </div>
