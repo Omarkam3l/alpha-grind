@@ -13,17 +13,30 @@ interface ProgressData {
 export function ProgressStats() {
   const [progressData, setProgressData] = useState<ProgressData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchProgressData();
+    // Get the current user's ID when the component mounts
+    const getUserId = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user?.id) {
+        setUserId(session.user.id);
+        fetchProgressData(session.user.id);
+      } else {
+        setIsLoading(false);
+      }
+    };
+    
+    getUserId();
   }, []);
 
-  const fetchProgressData = async () => {
+  const fetchProgressData = async (uid: string) => {
     try {
       const { data, error } = await supabase
         .from('progress')
         .select('category, value')
-        .eq('date', new Date().toISOString().split('T')[0]);
+        .eq('date', new Date().toISOString().split('T')[0])
+        .eq('user_id', uid);
       
       if (error) throw error;
       setProgressData(data || []);
@@ -50,6 +63,14 @@ export function ProgressStats() {
               <div className="flex items-center justify-center">
                 <ProgressRing progress={value} size={100} showPercentage={true} />
               </div>
+              {isLoading && (
+                <div className="text-center text-sm text-muted-foreground mt-2">Loading...</div>
+              )}
+              {!userId && !isLoading && (
+                <div className="text-center text-sm text-amber-600 dark:text-amber-400 mt-2">
+                  Sign in to track your progress
+                </div>
+              )}
             </CardContent>
           </Card>
         );

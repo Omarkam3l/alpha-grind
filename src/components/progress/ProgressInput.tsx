@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,9 +16,27 @@ export function ProgressInput({ onUpdate }: ProgressInputProps) {
     Running: '',
     Meditation: ''
   });
+  const [userId, setUserId] = useState<string | null>(null);
+  
+  useEffect(() => {
+    // Get the current user's ID when the component mounts
+    const getUserId = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user?.id) {
+        setUserId(session.user.id);
+      }
+    };
+    
+    getUserId();
+  }, []);
   
   const handleSubmit = async (category: string) => {
     try {
+      if (!userId) {
+        toast.error("You must be logged in to update progress");
+        return;
+      }
+      
       const value = parseInt(values[category as keyof typeof values]);
       if (isNaN(value) || value < 0 || value > 100) {
         toast.error("Please enter a valid number between 0 and 100");
@@ -31,6 +49,7 @@ export function ProgressInput({ onUpdate }: ProgressInputProps) {
           category,
           value,
           date: new Date().toISOString().split('T')[0],
+          user_id: userId
         }, {
           onConflict: 'user_id,date,category'
         });
@@ -68,12 +87,17 @@ export function ProgressInput({ onUpdate }: ProgressInputProps) {
             />
             <Button 
               onClick={() => handleSubmit(category)}
-              disabled={!values[category as keyof typeof values]}
+              disabled={!values[category as keyof typeof values] || !userId}
             >
               Save
             </Button>
           </div>
         ))}
+        {!userId && (
+          <div className="text-sm text-amber-600 dark:text-amber-400">
+            Please log in to save your progress.
+          </div>
+        )}
       </CardContent>
     </Card>
   );
