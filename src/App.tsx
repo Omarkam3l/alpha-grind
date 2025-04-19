@@ -15,6 +15,7 @@ import TimerPage from "./pages/TimerPage";
 import CalendarPage from "./pages/Calendar";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => {
               <div className="min-h-screen bg-background text-foreground antialiased">
                 <Routes>
                   <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
                   <Route path="/workouts" element={<WorkoutsPage />} />
                   <Route path="/progress" element={<ProgressPage />} />
                   <Route path="/habits" element={<HabitsPage />} />
@@ -37,7 +39,6 @@ const App = () => {
                   <Route path="/timer" element={<TimerPage />} />
                   <Route path="/calendar" element={<CalendarPage />} />
                   <Route path="/settings" element={<Settings />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>
